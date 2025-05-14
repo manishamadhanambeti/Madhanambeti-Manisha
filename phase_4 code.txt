@@ -1,0 +1,85 @@
+import time
+import random
+from cryptography.fernet import Fernet
+
+# --- Security Setup ---
+key = Fernet.generate_key()
+cipher = Fernet(key)
+
+def encrypt_data(data: str) -> bytes:
+    return cipher.encrypt(data.encode())
+
+def decrypt_data(encrypted_data: bytes) -> str:
+    return cipher.decrypt(encrypted_data).decode()
+
+# --- Performance Logger ---
+def log_performance(task_name, start_time):
+    duration = round(time.time() - start_time, 3)
+    print(f"[PERFORMANCE] {task_name} completed in {duration} seconds")
+
+# --- IoT Sensor Simulator ---
+def get_sensor_data():
+    return {
+        "temperature": round(random.uniform(20, 45), 2),
+        "humidity": round(random.uniform(10, 90), 2),
+        "seismic_activity": round(random.uniform(0.0, 8.0), 2),
+        "water_level": round(random.uniform(0.5, 5.0), 2)
+    }
+
+# --- AI Disaster Predictor ---
+def predict_disaster(sensor_data):
+    # Simulated logic based on sensor thresholds
+    if sensor_data["water_level"] > 4.0:
+        prediction = "Flood"
+    elif sensor_data["seismic_activity"] > 6.0:
+        prediction = "Earthquake"
+    elif sensor_data["temperature"] > 40 and sensor_data["humidity"] < 20:
+        prediction = "Wildfire"
+    else:
+        prediction = "None"
+    confidence = round(random.uniform(0.7, 0.99), 2)
+    return {"disaster": prediction, "confidence": confidence}
+
+# --- Chatbot System ---
+def get_chatbot_response(user_input):
+    emergency_keywords = ['help', 'emergency', 'flood', 'earthquake', 'fire', 'danger']
+    if any(word in user_input.lower() for word in emergency_keywords):
+        return "Emergency detected. Contacting emergency services..."
+    elif user_input.lower() in ['hi', 'hello']:
+        return "Hello! I'm your disaster response assistant. How can I help?"
+    else:
+        return "Stay safe! Let me know if you're facing a natural disaster or emergency."
+
+# --- Main Program Execution ---
+if _name_ == "_main_":
+    print("========== Natural Disaster Prediction & Management System ==========\n")
+
+    # Step 1: Simulate IoT Data
+    start = time.time()
+    sensor_data = get_sensor_data()
+    print("[Sensor Data]:", sensor_data)
+    log_performance("Sensor Data Collection", start)
+
+    # Step 2: Predict Disaster
+    start = time.time()
+    prediction = predict_disaster(sensor_data)
+    print("[Prediction]:", prediction)
+    log_performance("AI Disaster Prediction", start)
+
+    # Step 3: Encrypt and Decrypt Result
+    start = time.time()
+    encrypted_result = encrypt_data(str(prediction))
+    decrypted_result = decrypt_data(encrypted_result)
+    print("[Encrypted Prediction]:", encrypted_result)
+    print("[Decrypted Prediction]:", decrypted_result)
+    log_performance("Data Encryption/Decryption", start)
+
+    # Step 4: Chatbot Interaction
+    print("\n[Chatbot is active. Type 'exit' to quit]")
+    while True:
+        user_input = input("You: ")
+        if user_input.lower() == "exit":
+            print("Chatbot session ended.")
+            break
+        response = get_chatbot_response(user_input)
+        print("Bot:", response)
