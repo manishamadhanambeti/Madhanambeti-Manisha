@@ -1,0 +1,81 @@
+import random
+import time
+
+# --- Simulated IoT Sensor Data ---
+def get_sensor_data():
+    data = {
+        "temperature": round(random.uniform(15, 45), 2),
+        "humidity": round(random.uniform(10, 90), 2),
+        "seismic_activity": round(random.uniform(0.0, 8.0), 2),
+        "water_level": round(random.uniform(0.5, 5.5), 2),
+        "air_pressure": round(random.uniform(950, 1050), 2)
+    }
+    print(f"[IoT Data] {data}")
+    return data
+
+# --- AI Model for Disaster Prediction ---
+def predict_disaster(data):
+    if data["water_level"] > 4.5:
+        return ("Flood", round(random.uniform(0.85, 0.99), 2))
+    elif data["seismic_activity"] > 6.0:
+        return ("Earthquake", round(random.uniform(0.8, 0.98), 2))
+    elif data["temperature"] > 40 and data["humidity"] < 20:
+        return ("Wildfire", round(random.uniform(0.75, 0.95), 2))
+    elif data["air_pressure"] < 980:
+        return ("Storm", round(random.uniform(0.7, 0.92), 2))
+    else:
+        return ("No threat", round(random.uniform(0.95, 1.0), 2))
+
+# --- Chatbot Interface ---
+def chatbot():
+    print("\n[Chatbot] Ready. Type your query or 'exit' to quit.")
+    while True:
+        user_input = input("You: ").lower()
+        if user_input == "exit":
+            print("Chatbot session ended.")
+            break
+        elif "help" in user_input or "emergency" in user_input:
+            print("Bot: Emergency detected. Alerting local response team.")
+        elif "flood" in user_input or "earthquake" in user_input:
+            print("Bot: Stay calm. Move to higher ground or follow evacuation protocols.")
+        else:
+            print("Bot: I'm here to assist with any disaster-related concerns.")
+
+# --- Performance Logger ---
+def log_event(name, start_time):
+    elapsed = round(time.time() - start_time, 3)
+    print(f"[PERFORMANCE] {name} completed in {elapsed} sec\n")
+
+# --- Final Demonstration ---
+def main():
+    print("========== Natural Disaster Prediction & Management System ==========")
+    
+    # 1. Sensor Data Collection
+    start = time.time()
+    sensor_data = get_sensor_data()
+    log_event("Sensor Data Collection", start)
+
+    # 2. AI Prediction
+    start = time.time()
+    disaster, confidence = predict_disaster(sensor_data)
+    print(f"[Prediction] Detected: {disaster} | Confidence: {confidence}")
+    log_event("AI Prediction", start)
+
+    # 3. Alert Generation
+    if disaster != "No threat":
+        print(f"[ALERT] {disaster} warning issued with {confidence*100}% confidence!")
+    else:
+        print("[STATUS] Environment is stable. No alerts at this time.")
+
+    # 4. Start Chatbot
+    chatbot()
+
+    # 5. Summary Output
+    print("\n========== System Summary ==========")
+    print(f"Disaster Predicted : {disaster}")
+    print(f"Confidence Level    : {confidence}")
+    print(f"Sensor Inputs       : {sensor_data}")
+    print("System Status       : Online and operational")
+
+if _name_ == "_main_":
+    main()
